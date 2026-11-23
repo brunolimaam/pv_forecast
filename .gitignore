@@ -1,0 +1,7 @@
+# downloaded data and plots: made again by download_data.py and build_train_data.py
+data/
+
+# made by Python, uv and macOS
+__pycache__/
+.venv/
+.DS_Store
