@@ -1,0 +1,55 @@
+# Runs forecast.py every hour, commits the new forecast rows and publishes the
+# plots to GitHub Pages. The plots are not committed: they change every hour
+# and would fill the repository's history.
+name: forecast
+
+on:
+  schedule:
+    - cron: "45 * * * *"
+  workflow_dispatch:          # adds a "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write             # push the forecast file
+  pages: write                # publish the plots
+  id-token: write             # needed by deploy-pages
+
+concurrency:                  # a late start waits for the one before, so two never push at once
+  group: forecast
+  cancel-in-progress: false
+
+jobs:
+  forecast:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v6   # installs Python 3.13 and the packages in uv.lock
+        with:
+          enable-cache: true
+
+      - name: Forecast
+        run: uv run --locked python forecast.py
+
+      - name: Commit the new forecast
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add forecast/
+          if ! git diff --cached --quiet; then
+            git commit -m "Forecast $(date -u +'%Y-%m-%d %H:%M') UTC"
+            git pull --rebase
+            git push
+          fi
+
+      - name: Collect the plots
+        run: mkdir _site && cp forecast/*.png _site/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

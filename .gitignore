@@ -1,6 +1,10 @@
 # downloaded data and plots: made again by download_data.py and build_train_data.py
 data/
 
+# forecast plots: redrawn every hour and published to GitHub Pages by
+# .github/workflows/forecast.yml, not committed
+forecast/*.png
+
 # made by Python, uv and macOS
 __pycache__/
 .venv/

@@ -43,7 +43,8 @@ The data starts on 1 January 2024. All timestamps are UTC.
 | `train_model.py` | Builds the feature table, trains the model on all the data and saves it to `models/pv_model.joblib` |
 | `verify_model.py` | Trains the same model on the earlier data, tests it on the rest, and plots the results to `data/plots/` |
 | `forecast.py` | Runs the model on the newest ICON-D2 run, appends the hours 22–24 h and 46–48 h ahead to `forecast/pv_forecast.parquet`, and plots both timelines with the real output of the last three days |
-| `forecast/` | The forecasts of all past runs and the forecast plots. Kept in the repository: past runs cannot be downloaded again |
+| `forecast/` | The forecasts of all past runs. The plots are written here too, but not committed |
+| `.github/workflows/forecast.yml` | Runs `forecast.py` every hour on GitHub, commits the new forecast rows and publishes the plots to GitHub Pages |
 | `points.csv` | The forecast points: name, latitude, longitude |
 | `model.ipynb` | The explanation of the model and its verification, shown on the website |
 | `models/` | The trained model, with the list of features it expects |
