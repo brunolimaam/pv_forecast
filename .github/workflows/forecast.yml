@@ -20,9 +20,6 @@ concurrency:                  # a late start waits for the one before, so two ne
 jobs:
   forecast:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v5
 
@@ -51,5 +48,14 @@ jobs:
         with:
           path: _site
 
+  # A job of its own: run right after the upload in the same job, deploy-pages
+  # often does not find the artifact yet (actions/deploy-pages#451)
+  deploy:
+    needs: forecast
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
       - id: deploy
         uses: actions/deploy-pages@v4
