@@ -4,8 +4,6 @@
 name: forecast
 
 on:
-  schedule:
-    - cron: "45 * * * *"
   workflow_dispatch:          # adds a "Run workflow" button in the Actions tab
 
 permissions:

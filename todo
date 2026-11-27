@@ -1,1 +1,2 @@
-
+- On this repo's own Pages address: add a small index.html that shows both plots and a line or two about them, and have the workflow upload it alongside the PNGs.
+- Github unfortunatly skips runs quite often. Check if running a php script on the infomaniak server can call a page on github that would initiate the workflow
